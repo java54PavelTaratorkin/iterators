@@ -5,7 +5,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class RangePredicate extends Range {
-	private Predicate<Integer> predicate;
+	private Predicate<Integer> predicate = number -> true;
 	protected RangePredicate(int min, int max) {
 		super(min, max);
 	}
@@ -29,8 +29,11 @@ public class RangePredicate extends Range {
 		
 		@Override
 		public boolean hasNext() {
-			return predicate != null ? 
-					current < max : current <= max;
+			boolean res = false;
+			int value = current;
+			while(value <= max && !(res = predicate.test(value++)));
+			return current < max;
+//			return res;
 		}
 
 		@Override
@@ -39,14 +42,15 @@ public class RangePredicate extends Range {
 				throw new NoSuchElementException();
 			}
 
-			if (predicate != null) {
-				if (noSuchPredicator(current)) {
-					throw new NoSuchElementException();
-				}
-				nextEvenOdd();
-			} 		
+////			if (predicate != null) {
+//				if (noSuchPredicator(current)) {
+//					throw new NoSuchElementException();
+//				}
+//				nextEvenOdd();
+////			} 
+			while(!predicate.test(current++));
 			
-			return current++;
+			return current - 1;
 		}
 		
 		private void nextEvenOdd() {

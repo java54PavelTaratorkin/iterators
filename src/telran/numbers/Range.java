@@ -7,7 +7,7 @@ public class Range implements Iterable<Integer> {
 	protected static final String ERROR_MESSAGE = "max lees or equal min";
 	protected int min;
 	protected int max;
-	
+
 	protected Range (int min, int max) {
 		this.min = min;
 		this.max = max;
